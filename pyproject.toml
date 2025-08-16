@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ig-leadgen"
+version = "0.1.0"
+description = "Instagram lead generation agent"
+authors = [{name="OpenAI", email="dev@example.com"}]
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "requests",
+    "sqlalchemy",
+    "alembic",
+    "psycopg2-binary",
+    "pydantic",
+    "python-dotenv",
+    "structlog",
+    "prometheus-client",
+    "redis",
+    "rq",
+    "rq-scheduler",
+    "numpy",
+    "scikit-learn",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "ruff",
+    "mypy",
+    "pytest",
+    "fakeredis",
+]
+
+[tool.black]
+line-length = 88
+
+[tool.ruff]
+line-length = 88
+select = ["E", "F"]
+
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true
