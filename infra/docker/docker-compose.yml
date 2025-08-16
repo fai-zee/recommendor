@@ -1,0 +1,38 @@
+version: '3.9'
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ig
+    ports:
+      - "5432:5432"
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+  api:
+    build: ../..
+    command: uvicorn apps.api.main:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - ../..:/code
+    environment:
+      - DATABASE_URL=postgresql+psycopg2://postgres:postgres@db:5432/ig
+      - REDIS_URL=redis://redis:6379/0
+      - API_KEY=dev-local
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+  worker:
+    build: ../..
+    command: python -m services.workers.worker
+    volumes:
+      - ../..:/code
+    environment:
+      - DATABASE_URL=postgresql+psycopg2://postgres:postgres@db:5432/ig
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - db
+      - redis
